@@ -12,3 +12,9 @@
 [2026-05-13 17:30:39] ALERTA: Tentativa de voto duplo
 [2026-05-13 17:30:57] ALERTA: Tentativa de acesso negado
 [2026-05-13 17:31:01] ALERTA: Tentativa de acesso negado
+[2026-05-13 18:13:17] ABERTURA: Votação iniciada com sucesso. Total de votos zerado.
+[2026-05-13 18:13:39] ALERTA: Tentativa de acesso negado
+[2026-05-13 18:14:05] SUCESSO: Voto realizado com sucesso
+[2026-05-13 18:14:25] ENCERRAMENTO: Votação finalizada com sucesso.
+[2026-05-13 18:14:57] ABERTURA: Votação iniciada com sucesso. Total de votos zerado.
+[2026-05-13 18:15:13] SUCESSO: Voto realizado com sucesso

@@ -37,25 +37,35 @@ def validar_credenciais(cursor, titulo, cpf_4_digitos, chave, perfil_exigido):
     return False
 
 def abrir_votacao(conexao, cursor):
-    
-    ##Efetua a autenticação do mesário, executa a Zerézima e abre a urna.
-    
+    """
+    Efetua a autenticação do mesário, executa a Zerézima e abre a urna.
+
+    Args:
+        conexao (mysql.connector.connection.MySQLConnection): A conexão atual com o banco de dados.
+        cursor (mysql.connector.cursor.MySQLCursor): O cursor para execução de comandos SQL.
+
+    Returns:
+        bool: Retorna True se a votação foi aberta com sucesso, False em caso de falha na validação.
+    """
     print("\n--- ABERTURA DO SISTEMA DE VOTAÇÃO ---")
     titulo = input("Digite o título de eleitor do mesário: ")
     cpf_4 = input("Digite os 4 primeiros dígitos do CPF: ")
     chave = input("Digite a chave de acesso: ")
 
+    # Validação das credenciais do mesário antes de iniciar a Zerézima
     if validar_credenciais(cursor, titulo, cpf_4, chave, "mesario") == False:
         print("\n[Erro] Falha na validação do mesário. Acesso negado.")
         registrar_log("ALERTA: Tentativa de acesso negado")
         pausar_e_limpar()
         return False
 
-    # Processo de Zerézima (Limpar votos antigos)
+    # Processo de Zerézima: Limpa votos anteriores e reseta status dos eleitores
     cursor.execute("DELETE FROM Votos")
+    cursor.execute("UPDATE Eleitores SET ja_votou = FALSE")
     conexao.commit()
     
     print("\n--- ZERÉZIMA CONCLUÍDA ---")
+    # Consulta a lista de candidatos para exibir o total zerado
     cursor.execute("SELECT digito_candidatos, nome_candidato FROM Candidatos")
     candidatos = cursor.fetchall()
     
@@ -65,6 +75,7 @@ def abrir_votacao(conexao, cursor):
     else:
         print("Nenhum candidato registado na base de dados.")
 
+    # Registo oficial da abertura no ficheiro de logs
     registrar_log("ABERTURA: Votação iniciada com sucesso. Total de votos zerado.")
     print("\n[Sistema] Votação aberta com sucesso!")
     pausar_e_limpar()
